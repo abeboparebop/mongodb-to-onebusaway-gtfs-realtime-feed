@@ -82,7 +82,7 @@ import com.mongodb.ServerAddress;
  * Former description now out of date! Now the class periodically polls a 
  * MongoDB of bus locations and converts that data into GTFS-realtime format.
  *
- * @auther jlynn
+ * @auther Jacob Lynn
  */
 
 @Singleton
@@ -96,7 +96,7 @@ public class GtfsRealtimeProviderImpl implements GtfsRealtimeProvider {
 
     private URL _url;
 
-    private long _currtime = 1364867151000L;
+    private long _currtime = 1365614681000L;
 
     /**
      * How often alerts will be downloaded, in seconds.
@@ -206,7 +206,6 @@ public class GtfsRealtimeProviderImpl implements GtfsRealtimeProvider {
 	 */
 	for (int i = 0; i < dbList.size(); ++i) {
 	    DBObject obj = dbList.get(i);
-
 	    Location newLoc = new Location(obj);
 	    locationList.addLocation(newLoc);
 	}
@@ -219,26 +218,43 @@ public class GtfsRealtimeProviderImpl implements GtfsRealtimeProvider {
 	_log.info("locs extracted: " + _locs.getEntityCount());
 
 	/* Update current time for subsequent queries: */
-	System.out.println(_currtime);
 	_currtime = locationList.maxTime();
-	System.out.println(_currtime);
     }
     
     /**
      * @return a DBObject array of recent entries in MongoDB collection.
      */
     private ArrayList<DBObject> downloadLocations() throws IOException {
-	BasicDBObject query = new BasicDBObject("entity.vehicle.timestamp", 
-						new BasicDBObject("$gt",_currtime));
-	DBCursor cursor = _coll.find(query);
+	// get list of distinct bus ids:
+	List busIDs = _coll.distinct("entity.id");
+
 	ArrayList<DBObject> myList = new ArrayList<DBObject>();
-	try {
-	    while(cursor.hasNext()) {
-		DBObject myDoc = cursor.next();
-		myList.add(myDoc);
+
+	// Loop over bus ids; get most recent timestamp for each
+	for (Object busID : busIDs) {
+	    ArrayList queryList = new ArrayList();
+	    // most recent timestamp:
+	    queryList.add(new BasicDBObject("entity.vehicle.timestamp", 
+					    new BasicDBObject("$gt",_currtime)));
+
+	    // match on bus ID:
+	    queryList.add(new BasicDBObject("entity.id",busID.toString()));
+
+	    // build full query
+	    BasicDBObject query = new BasicDBObject("$and", queryList);
+	    DBCursor cursor2 = _coll.find(query)
+		.sort( new BasicDBObject("entity.vehicle.timestamp", -1))
+		.limit(1);
+
+	    try {
+		while (cursor2.hasNext()) {
+		    DBObject myDoc = cursor2.next();
+		    myList.add(myDoc);
+		}
+	    } finally {
+		cursor2.close();
 	    }
-	} finally {
-	    cursor.close();
+	    
 	}
 
 	return myList;

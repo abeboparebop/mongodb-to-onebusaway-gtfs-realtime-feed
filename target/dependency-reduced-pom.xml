@@ -10,15 +10,15 @@
   <name>onebusaway-gtfs-realtime-locations-producer-demo</name>
   <version>0.0.1-SNAPSHOT</version>
   <description>A quickstart project demonstrating how to produce a GTFS-realtime vehicle locations feed.</description>
-  <url>https://github.com/OneBusAway/onebusaway-gtfs-realtime-alerts-producer-demo/wiki/</url>
+  <url>https://github.com/abeboparebop/mongodb-to-onebusaway-gtfs-realtime-feed</url>
   <issueManagement>
     <system>GitHub</system>
-    <url>https://github.com/OneBusAway/onebusaway-gtfs-realtime-alerts-producer-demo/issues</url>
+    <url>https://github.com/abeboparebop/mongodb-to-onebusaway-gtfs-realtime-feed.git/issues</url>
   </issueManagement>
   <scm>
-    <connection>scm:git:http://github.com/OneBusAway/onebusaway-gtfs-realtime-alerts-producer-demo.git</connection>
-    <developerConnection>scm:git:ssh://git@github.com/OneBusAway/onebusaway-gtfs-realtime-alerts-producer-demo.git</developerConnection>
-    <url>http://github.com/OneBusAway/onebusaway-gtfs-realtime-alerts-producer-demo</url>
+    <connection>scm:git:http://github.com/abeboparebop/mongodb-to-onebusaway-gtfs-realtime-feed.git</connection>
+    <developerConnection>scm:git:ssh://git@github.com/abeboparebop/mongodb-to-onebusaway-gtfs-realtime-feed.git</developerConnection>
+    <url>http://github.com/abeboparebop/mongodb-to-onebusaway-gtfs-realtime-feed.git</url>
   </scm>
   <build>
     <plugins>
