@@ -1,0 +1,13 @@
+Description:
+  Simple demo application that converts MongoDB data into a GTFS-realtime feed
+  
+Usage:
+  java -jar demo.jar --alertsPath=path --mongoClient=mongoURI --dbName=name --collectionName=name
+  java -jar demo.jar --alertsUrl=url 
+
+Args:
+  --locationsPath=path           write GTFS-realtime locations to the specified path
+  --locationsUrl=url             share GTFS-realtime locations at the specified URL (eg. "http://localhost:8080/locations")
+  --mongoClient=mongoURI      connect to MongoDB instance at specified URI
+  --dbName=name		      Mongo database name
+  --collectionName=name	      Mongo collection name
