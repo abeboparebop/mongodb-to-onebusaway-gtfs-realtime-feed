@@ -142,7 +142,7 @@ public class Location {
 	// protobuf wants seconds.
 	long t1 = (long) (((double) timestamp)/1000.0);
 
-	new_vpos.setTimestamp(t1);
+	new_vpos.setTimestamp(timestamp);
 	new_vpos.setVehicle(new_vd);
 
 	new_ent.setVehicle(new_vpos);
