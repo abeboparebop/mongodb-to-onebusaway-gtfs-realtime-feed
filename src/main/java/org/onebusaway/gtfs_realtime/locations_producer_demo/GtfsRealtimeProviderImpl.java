@@ -106,6 +106,7 @@ public class GtfsRealtimeProviderImpl implements GtfsRealtimeProvider {
     private MongoClient _client;
     private DB _db;
     private DBCollection _coll;
+    private DBCollection _busColl;
 
     private LocationList locationList = new LocationList();
 
@@ -122,6 +123,9 @@ public class GtfsRealtimeProviderImpl implements GtfsRealtimeProvider {
     }
     public void setColl(String coll) {
 	_coll = _db.getCollection(coll);
+    }
+    public void setBusColl(String busColl) {
+	_busColl = _db.getCollection(busColl);
     }
 
     /**
@@ -226,7 +230,10 @@ public class GtfsRealtimeProviderImpl implements GtfsRealtimeProvider {
      */
     private ArrayList<DBObject> downloadLocations() throws IOException {
 	// get list of distinct bus ids:
+	_log.info("getting distinct bus IDs");
 	List busIDs = _coll.distinct("entity.id");
+	_log.info("success: bus IDs");
+	System.out.println(busIDs);
 
 	ArrayList<DBObject> myList = new ArrayList<DBObject>();
 
@@ -242,6 +249,8 @@ public class GtfsRealtimeProviderImpl implements GtfsRealtimeProvider {
 
 	    // build full query
 	    BasicDBObject query = new BasicDBObject("$and", queryList);
+
+	    _log.info("query on busID " + busID.toString());
 	    DBCursor cursor2 = _coll.find(query)
 		.sort( new BasicDBObject("entity.vehicle.timestamp", -1))
 		.limit(1);
@@ -259,6 +268,46 @@ public class GtfsRealtimeProviderImpl implements GtfsRealtimeProvider {
 
 	return myList;
     }
+
+    // /**
+    //  * @return a DBObject array of recent entries in MongoDB collection.
+    //  */
+    // private getActiveBuses() throws IOException {
+    // 	_db.getCollection(coll)
+    // 	// get list of distinct bus ids:
+    // 	List busIDs = _coll.distinct("entity.id");
+
+    // 	ArrayList<DBObject> myList = new ArrayList<DBObject>();
+
+    // 	// Loop over bus ids; get most recent timestamp for each
+    // 	for (Object busID : busIDs) {
+    // 	    ArrayList queryList = new ArrayList();
+    // 	    // most recent timestamp:
+    // 	    queryList.add(new BasicDBObject("entity.vehicle.timestamp", 
+    // 					    new BasicDBObject("$gt",_currtime)));
+
+    // 	    // match on bus ID:
+    // 	    queryList.add(new BasicDBObject("entity.id",busID.toString()));
+
+    // 	    // build full query
+    // 	    BasicDBObject query = new BasicDBObject("$and", queryList);
+    // 	    DBCursor cursor2 = _coll.find(query)
+    // 		.sort( new BasicDBObject("entity.vehicle.timestamp", -1))
+    // 		.limit(1);
+
+    // 	    try {
+    // 		while (cursor2.hasNext()) {
+    // 		    DBObject myDoc = cursor2.next();
+    // 		    myList.add(myDoc);
+    // 		}
+    // 	    } finally {
+    // 		cursor2.close();
+    // 	    }
+	    
+    // 	}
+
+    // 	return myList;
+    // }
     
     /**
      * Task that will download new locations from the remote data source when
