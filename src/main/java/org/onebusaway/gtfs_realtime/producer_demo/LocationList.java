@@ -41,6 +41,7 @@ import org.onebusway.gtfs_realtime.exporter.GtfsRealtimeLibrary;
 @Singleton
 public class LocationList {
     ArrayList<Location> locations = new ArrayList<Location>();
+    ArrayList<Object> busIDs = new ArrayList<Object>();
 
     public void addLocation(Location newLoc) {
 	/* New vehicle? Add new Location to list.
@@ -114,5 +115,16 @@ public class LocationList {
 	    }
 	}
 	return maxStamp;
+    }
+
+    public void setBusIDs(ArrayList<Object> newBusIDs) {
+	busIDs = newBusIDs;
+    }
+
+    public ArrayList getBusIDs() {
+	return busIDs;
+    }
+
+    public void clearOld(long ageLim) {
     }
 }

@@ -112,8 +112,8 @@ public class GtfsRealtimeProducerDemoMain {
     }
 
     protected void buildOptions(Options options) {
-	options.addOption(ARG_LOCATIONS_PATH, true, "trip updates path");
-	options.addOption(ARG_LOCATIONS_URL, true, "trip updates url");
+	options.addOption(ARG_LOCATIONS_PATH, true, "locations path");
+	options.addOption(ARG_LOCATIONS_URL, true, "locations url");
 	options.addOption(ARG_MONGO_CLIENT, true, "MongoDB URI");
 	options.addOption(ARG_DATABASE_NAME, true, "database name");
 	options.addOption(ARG_COLLECTION_NAME, true, "collection name");

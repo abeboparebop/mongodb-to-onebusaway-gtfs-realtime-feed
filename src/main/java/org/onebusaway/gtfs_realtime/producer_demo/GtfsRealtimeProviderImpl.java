@@ -103,6 +103,16 @@ public class GtfsRealtimeProviderImpl implements GtfsRealtimeProvider {
      */
     private int _refreshInterval = 30;
 
+    /**
+     * How often bus list will be downloaded, in seconds.
+     */
+    private int _busListInterval = 60*60*3;
+
+    /**
+     * Age above which locations will be removed from list, in ms.
+     */
+    private long _ageLim = 10*60*1000;
+
     private MongoClient _client;
     private DB _db;
     private DBCollection _coll;
@@ -127,6 +137,9 @@ public class GtfsRealtimeProviderImpl implements GtfsRealtimeProvider {
     public void setBusColl(String busColl) {
 	_busColl = _db.getCollection(busColl);
     }
+    public void setAgeLim(int ageLim) {
+	_ageLim = ageLim;
+    }
 
     /**
      * @param refreshInterval how often alerts will be downloaded, in seconds.
@@ -142,8 +155,10 @@ public class GtfsRealtimeProviderImpl implements GtfsRealtimeProvider {
      */
     @PostConstruct
 	public void start() {
-	_log.info("starting GTFS-realtime service");
 	_executor = Executors.newSingleThreadScheduledExecutor();
+	_log.info("starting GTFS-realtime service");
+	_executor.scheduleAtFixedRate(new BusListRefreshTask(), 0, _busListInterval,
+				      TimeUnit.SECONDS);
 	_executor.scheduleAtFixedRate(new LocationRefreshTask(), 0, _refreshInterval,
 				      TimeUnit.SECONDS);
     }
@@ -156,6 +171,7 @@ public class GtfsRealtimeProviderImpl implements GtfsRealtimeProvider {
 	_log.info("stopping GTFS-realtime service");
 	_executor.shutdownNow();
     }
+
     
     /****
      * {@link GtfsRealtimeProvider} Interface
@@ -213,6 +229,8 @@ public class GtfsRealtimeProviderImpl implements GtfsRealtimeProvider {
 	    Location newLoc = new Location(obj);
 	    locationList.addLocation(newLoc);
 	}
+
+	// locationList.clearOld(_ageLim);
 	
 	/**
 	 * Build out the final GTFS-realtime feed message and save it to the alerts
@@ -230,12 +248,13 @@ public class GtfsRealtimeProviderImpl implements GtfsRealtimeProvider {
      */
     private ArrayList<DBObject> downloadLocations() throws IOException {
 	// get list of distinct bus ids:
-	_log.info("getting distinct bus IDs");
-	List busIDs = _coll.distinct("entity.id");
-	_log.info("success: bus IDs");
-	System.out.println(busIDs);
+	// _log.info("getting distinct bus IDs");
+	// List busIDs = _coll.distinct("entity.id");
+	// _log.info("success: bus IDs");
+	// System.out.println(busIDs);
 
 	ArrayList<DBObject> myList = new ArrayList<DBObject>();
+	ArrayList<Object> busIDs = locationList.getBusIDs();
 
 	// Loop over bus ids; get most recent timestamp for each
 	for (Object busID : busIDs) {
@@ -322,6 +341,28 @@ public class GtfsRealtimeProviderImpl implements GtfsRealtimeProvider {
 		refreshLocations();
 	    } catch (Exception ex) {
 		_log.warn("Error in location refresh task", ex);
+	    }
+	}
+    }
+
+    /**
+     * Task that will download bus IDs from the remote data source when
+     * executed.
+     */
+    private class BusListRefreshTask implements Runnable {
+	
+	@Override
+	    public void run() {
+	    try {
+		// get list of distinct bus ids:
+		_log.info("getting distinct bus IDs");
+		List busIDs = _coll.distinct("entity.id");
+		_log.info("success: bus IDs");
+		System.out.println(busIDs);
+
+		locationList.setBusIDs(new ArrayList(busIDs));
+	    } catch (Exception ex) {
+		_log.warn("Error in bus ID refresh task", ex);
 	    }
 	}
     }
