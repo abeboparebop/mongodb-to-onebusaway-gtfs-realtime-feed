@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.onebusaway.gtfs_realtime.locations_producer_demo;
+package org.onebusaway.gtfs_realtime.producer_demo;
 
 import java.util.Set;
 
@@ -24,10 +24,10 @@ import org.onebusway.gtfs_realtime.exporter.GtfsRealtimeProvider;
 import com.google.inject.AbstractModule;
 import com.google.inject.Module;
 
-public class GtfsRealtimeLocationsProducerDemoModule extends AbstractModule {
+public class GtfsRealtimeProducerDemoModule extends AbstractModule {
 
   public static void addModuleAndDependencies(Set<Module> modules) {
-    modules.add(new GtfsRealtimeLocationsProducerDemoModule());
+    modules.add(new GtfsRealtimeProducerDemoModule());
     GtfsRealtimeExporterModule.addModuleAndDependencies(modules);
     JSR250Module.addModuleAndDependencies(modules);
   }

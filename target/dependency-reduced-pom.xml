@@ -6,10 +6,10 @@
     <version>1.1.7</version>
   </parent>
   <modelVersion>4.0.0</modelVersion>
-  <artifactId>onebusaway-gtfs-realtime-locations-producer-demo</artifactId>
-  <name>onebusaway-gtfs-realtime-locations-producer-demo</name>
+  <artifactId>onebusaway-gtfs-realtime-producer-demo</artifactId>
+  <name>onebusaway-gtfs-locations-producer-demo</name>
   <version>0.0.1-SNAPSHOT</version>
-  <description>A quickstart project demonstrating how to produce a GTFS-realtime vehicle locations feed.</description>
+  <description>A quickstart project demonstrating how to produce a GTFS-realtime feed.</description>
   <url>https://github.com/abeboparebop/mongodb-to-onebusaway-gtfs-realtime-feed</url>
   <issueManagement>
     <system>GitHub</system>
@@ -39,7 +39,7 @@
               <shadedClassifierName>withAllDependencies</shadedClassifierName>
               <transformers>
                 <transformer>
-                  <mainClass>org.onebusaway.gtfs_realtime.locations_producer_demo.GtfsRealtimeLocationsProducerDemoMain</mainClass>
+                  <mainClass>org.onebusaway.gtfs_realtime.producer_demo.GtfsRealtimeProducerDemoMain</mainClass>
                 </transformer>
               </transformers>
             </configuration>

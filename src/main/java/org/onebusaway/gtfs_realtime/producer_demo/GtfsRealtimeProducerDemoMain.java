@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.onebusaway.gtfs_realtime.locations_producer_demo;
+package org.onebusaway.gtfs_realtime.producer_demo;
 
 import java.io.File;
 import java.net.URL;
@@ -36,7 +36,7 @@ import com.google.inject.Guice;
 import com.google.inject.Injector;
 import com.google.inject.Module;
 
-public class GtfsRealtimeLocationsProducerDemoMain {
+public class GtfsRealtimeProducerDemoMain {
 
     private static final String ARG_LOCATIONS_PATH = "locationsPath";
 
@@ -47,7 +47,7 @@ public class GtfsRealtimeLocationsProducerDemoMain {
     private static final String ARG_COLLECTION_NAME = "collectionName";
     
     public static void main(String[] args) throws Exception {
-	GtfsRealtimeLocationsProducerDemoMain m = new GtfsRealtimeLocationsProducerDemoMain();
+	GtfsRealtimeProducerDemoMain m = new GtfsRealtimeProducerDemoMain();
 	m.run(args);
     }
     
@@ -78,7 +78,7 @@ public class GtfsRealtimeLocationsProducerDemoMain {
 	CommandLine cli = parser.parse(options, args);
 
 	Set<Module> modules = new HashSet<Module>();
-	GtfsRealtimeLocationsProducerDemoModule.addModuleAndDependencies(modules);
+	GtfsRealtimeProducerDemoModule.addModuleAndDependencies(modules);
 
 	Injector injector = Guice.createInjector(modules);
 	injector.injectMembers(this);
