@@ -126,5 +126,16 @@ public class LocationList {
     }
 
     public void clearOld(long ageLim) {
+	Long timeNow = System.currentTimeMillis();
+
+	ArrayList<Location> newLocations = new ArrayList<Location>();
+	
+	for (Location loc : locations) {
+	    if (timeNow - loc.getTimestamp() < ageLim) {
+		newLocations.add(loc);
+	    }
+	}
+
+	locations = newLocations;
     }
 }

@@ -45,6 +45,8 @@ public class GtfsRealtimeProducerDemoMain {
     private static final String ARG_MONGO_CLIENT = "mongoClient";
     private static final String ARG_DATABASE_NAME = "dbName";
     private static final String ARG_COLLECTION_NAME = "collectionName";
+
+    private static final String ARG_AGELIM = "ageLim";
     
     public static void main(String[] args) throws Exception {
 	GtfsRealtimeProducerDemoMain m = new GtfsRealtimeProducerDemoMain();
@@ -93,6 +95,10 @@ public class GtfsRealtimeProducerDemoMain {
 	else
 	    throw new IllegalArgumentException("Need MongoClient URI, database name, collection name.");
 
+	if (cli.hasOption(ARG_AGELIM)) {
+	    _provider.setAgeLim(cli.getOptionValue(ARG_AGELIM));
+	}
+
 	if (cli.hasOption(ARG_LOCATIONS_URL)) {
 	    URL url = new URL(cli.getOptionValue(ARG_LOCATIONS_URL));
 	    VehiclePositionsServlet servlet = injector.getInstance(VehiclePositionsServlet.class);
@@ -117,5 +123,6 @@ public class GtfsRealtimeProducerDemoMain {
 	options.addOption(ARG_MONGO_CLIENT, true, "MongoDB URI");
 	options.addOption(ARG_DATABASE_NAME, true, "database name");
 	options.addOption(ARG_COLLECTION_NAME, true, "collection name");
+	options.addOption(ARG_AGELIM, true, "age limit for removal, in ms");
     }
 }

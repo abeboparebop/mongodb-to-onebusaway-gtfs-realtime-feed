@@ -137,9 +137,10 @@ public class GtfsRealtimeProviderImpl implements GtfsRealtimeProvider {
     public void setBusColl(String busColl) {
 	_busColl = _db.getCollection(busColl);
     }
-    public void setAgeLim(int ageLim) {
-	_ageLim = ageLim;
+    public void setAgeLim(String ageLim) {
+	_ageLim = Integer.parseInt(ageLim);
     }
+
 
     /**
      * @param refreshInterval how often alerts will be downloaded, in seconds.
@@ -230,7 +231,8 @@ public class GtfsRealtimeProviderImpl implements GtfsRealtimeProvider {
 	    locationList.addLocation(newLoc);
 	}
 
-	// locationList.clearOld(_ageLim);
+	_log.info("clearing locations older than " + _ageLim/60/1000 + " minutes");
+	locationList.clearOld(_ageLim);
 	
 	/**
 	 * Build out the final GTFS-realtime feed message and save it to the alerts
